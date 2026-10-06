@@ -150,7 +150,7 @@
             logs and spaghetti integrations to orderly, observable deployments.
           </p>
           <div class="cta-row cta-left">
-            <a class="btn btn-primary" href="/book.pdf" target="_blank" rel="noopener">Read the book (PDF)</a>
+            <a id="book-download" class="btn btn-primary" href="/book.pdf" target="_blank" rel="noopener">Read the book (PDF)</a>
           </div>
         </div>
       </div>
@@ -227,5 +227,25 @@
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+
+  <!-- Track book engagement via Vercel custom events -->
+  <script>
+    (function () {
+      function track(name) { if (window.va) window.va('event', { name: name }); }
+
+      // book_view: fire once when the book section scrolls into view
+      var book = document.getElementById('rag-book');
+      if (book && 'IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          if (entries[0].isIntersecting) { track('book_view'); io.disconnect(); }
+        }, { threshold: 0.4 });
+        io.observe(book);
+      }
+
+      // book_download: fire when the "Read the book" button is clicked
+      var dl = document.getElementById('book-download');
+      if (dl) dl.addEventListener('click', function () { track('book_download'); });
+    })();
+  </script>
 </body>
 </html>
