@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Agents in Production — Chinmay Murugkar</title>
+  <meta name="description" content="AI Agents in Production: Infrastructure Engineering for Reliable LLM Systems — a book by Chinmay Murugkar." />
+  <meta name="author" content="Chinmay Murugkar" />
+
+  <meta property="og:title" content="AI Agents in Production" />
+  <meta property="og:description" content="Infrastructure Engineering for Reliable LLM Systems — by Chinmay Murugkar." />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://chinmaymurugkar.com/book" />
+  <meta property="og:image" content="https://chinmaymurugkar.com/book-cover.jpg" />
+
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="subpage-nav">
+    <a class="brand" href="/">
+      <img class="logo" src="/logo.svg" alt="Tech Talks logo" width="56" height="56" />
+    </a>
+    <a class="back" href="/">← Back to home</a>
+  </header>
+
+  <main>
+    <section class="block" style="border-top: none;">
+      <div class="book">
+        <a class="book-cover" href="/read">
+          <img src="/book-cover.jpg" alt="AI Agents in Production — book cover" width="1050" height="1500" />
+        </a>
+        <div class="book-body">
+          <p class="book-kicker">Author · New Book</p>
+          <h1 class="book-title">AI Agents in Production</h1>
+          <p class="book-sub">Infrastructure Engineering for Reliable LLM Systems</p>
+          <p>
+            AI agents are easy to demo and hard to run. This book is about the gap in
+            between — the infrastructure, patterns, and engineering discipline that take
+            an agent from a flaky prototype to a reliable, observable production system.
+          </p>
+          <ul class="whats-inside">
+            <li>Taming chaos: error handling, retries, and graceful degradation</li>
+            <li>Orchestrating tools, APIs, and multi-step agent workflows</li>
+            <li>Guardrails against hallucination and non-deterministic failure</li>
+            <li>Observability, evaluation, and cost control at scale</li>
+            <li>Orderly, repeatable deployment of LLM systems</li>
+          </ul>
+          <div class="cta-row cta-left">
+            <a class="btn btn-primary" href="/read">Read the book (PDF)</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Chinmay Murugkar · Tech Talks</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  <!-- Vercel Web Analytics — counts visits to /book -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

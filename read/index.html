@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opening the book… — Chinmay Murugkar</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+
+  <!-- Vercel Web Analytics — this page view = a book open/download -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <main class="redirect">
+    <div>
+      <div class="spinner" aria-hidden="true"></div>
+      <h1>Opening the book…</h1>
+      <p>Your download should start automatically.<br />
+         If it doesn't, <a href="/book.pdf">click here to open the PDF</a>.</p>
+    </div>
+  </main>
+
+  <script>
+    // Give the analytics beacon a moment to register this page view, then open the PDF.
+    setTimeout(function () {
+      window.location.replace('/book.pdf');
+    }, 1400);
+  </script>
+</body>
+</html>

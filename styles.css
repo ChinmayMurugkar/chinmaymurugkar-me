@@ -264,6 +264,49 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 1.5rem; }
 }
 .book-body p { color: #c6cbd6; margin-bottom: 1.4rem; max-width: 560px; }
 
+/* Sub-pages (/book, /read) */
+.subpage-nav {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.subpage-nav .back { color: var(--muted); text-decoration: none; font-size: 0.95rem; }
+.subpage-nav .back:hover { color: #fff; }
+.subpage-nav .logo { filter: drop-shadow(0 0 18px rgba(124, 92, 255, 0.35)); }
+.book-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 600;
+  font-size: 2.2rem;
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+.whats-inside { list-style: none; display: grid; gap: 0.5rem; margin: 1.25rem 0 1.5rem; }
+.whats-inside li { color: #c6cbd6; padding-left: 1.4rem; position: relative; }
+.whats-inside li::before { content: "▹"; position: absolute; left: 0; color: var(--accent-2); }
+
+.redirect {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+.redirect .spinner {
+  width: 42px; height: 42px;
+  margin: 0 auto 1.5rem;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.redirect h1 { font-family: "Playfair Display", Georgia, serif; font-weight: 600; font-size: 1.6rem; margin-bottom: 0.6rem; }
+.redirect p { color: var(--muted); }
+.redirect a { color: var(--accent-2); }
+
 /* Footer */
 .footer {
   max-width: var(--max);
