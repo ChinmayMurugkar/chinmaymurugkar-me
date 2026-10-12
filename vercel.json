@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    { "source": "/contact", "destination": "/#contact", "permanent": true },
+    { "source": "/contact/", "destination": "/#contact", "permanent": true },
+    { "source": "/contact-me", "destination": "/#contact", "permanent": true },
+    { "source": "/contact-me/", "destination": "/#contact", "permanent": true },
+    { "source": "/home", "destination": "/", "permanent": true },
+    { "source": "/home/", "destination": "/", "permanent": true }
+  ]
+}

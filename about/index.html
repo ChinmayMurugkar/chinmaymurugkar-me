@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Chinmay Murugkar</title>
+  <meta name="description" content="About Chinmay Murugkar — engineering leader, innovator, and author working at the intersection of AI and large-scale systems." />
+  <meta name="author" content="Chinmay Murugkar" />
+
+  <meta property="og:title" content="About — Chinmay Murugkar" />
+  <meta property="og:description" content="Engineering leader, innovator, and author. AI infrastructure, generative AI, system design, and algorithms." />
+  <meta property="og:type" content="profile" />
+  <meta property="og:url" content="https://chinmaymurugkar.com/about" />
+  <meta property="og:image" content="https://chinmaymurugkar.com/chinmay.jpg" />
+
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="subpage-nav">
+    <a class="brand" href="/">
+      <img class="logo" src="/logo.svg" alt="Tech Talks logo" width="56" height="56" />
+    </a>
+    <a class="back" href="/">← Back to home</a>
+  </header>
+
+  <main>
+    <section class="block profile" style="border-top: none;">
+      <div class="profile-photo">
+        <img src="/chinmay.jpg" alt="Chinmay Murugkar" width="1044" height="1024" />
+      </div>
+      <div class="profile-body">
+        <h1 class="book-title">About Chinmay Murugkar</h1>
+        <p class="roles">Engineering Leader · Innovator · Author</p>
+        <p>
+          I'm an engineering leader working at the intersection of artificial intelligence
+          and large-scale systems. I build and scale the infrastructure that makes AI
+          practical in production, lead teams through hard architectural decisions, and
+          write about the ideas that move the field forward.
+        </p>
+        <p>
+          My work spans AI infrastructure, generative AI and retrieval-augmented systems,
+          distributed system design, and the algorithms underneath. I'm the author of
+          <a href="/book" style="color: var(--accent-2);">AI Agents in Production</a>, and
+          I build open-source tools for the agent community including
+          <a href="https://www.aiskillet.com/" target="_blank" rel="noopener" style="color: var(--accent-2);">AI Skillet</a>,
+          <a href="https://www.agentvoy.com/" target="_blank" rel="noopener" style="color: var(--accent-2);">AgentVoy</a>, and
+          <a href="https://oculos.dev/" target="_blank" rel="noopener" style="color: var(--accent-2);">Oculos</a>.
+        </p>
+        <p>
+          Tech Talks is where I share that thinking in plain language — written to be
+          understood, not just skimmed.
+        </p>
+        <ul class="highlights">
+          <li>
+            <span class="h-label">Leadership</span>
+            <span class="h-text">Building and scaling engineering teams and AI platforms.</span>
+          </li>
+          <li>
+            <span class="h-label">Author</span>
+            <span class="h-text">AI Agents in Production — Infrastructure Engineering for Reliable LLM Systems.</span>
+          </li>
+          <li>
+            <span class="h-label">Open Source</span>
+            <span class="h-text">AI Skillet, AgentVoy, Oculos, and more for building with agents.</span>
+          </li>
+          <li>
+            <span class="h-label">Writer &amp; Speaker</span>
+            <span class="h-text">Deep-dives on AI, systems, and algorithms via Tech Talks.</span>
+          </li>
+        </ul>
+        <div class="cta-row cta-left">
+          <a class="btn btn-primary" href="mailto:cthecm@gmail.com">Email me</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/chinmaymurugkar/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn btn-ghost" href="https://github.com/ChinmayMurugkar" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Chinmay Murugkar · Tech Talks</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  <!-- Vercel Web Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
