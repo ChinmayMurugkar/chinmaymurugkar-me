@@ -11,11 +11,17 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 
-export function mountAgenticFactory(root, options = {}) {
+export function mountAgenticFactory(mountPoint, options = {}) {
   const embed = options.embed !== false
   const lockMode = options.lockMode || null
-  root.classList.add('agentic-factory-3d')
-  if (embed) root.classList.add('embed')
+
+  // Mount into a dedicated child so the component's own .agentic-factory-3d styles
+  // never collide with the host's wrapper (e.g. a full-bleed, absolutely positioned hero bg).
+  const root = document.createElement('div')
+  root.className = 'agentic-factory-3d' + (embed ? ' embed' : '')
+  root.style.width = '100%'
+  root.style.height = '100%'
+  mountPoint.appendChild(root)
 
   const styleEl = document.createElement('style')
   styleEl.textContent = STYLES
@@ -47,6 +53,7 @@ export function mountAgenticFactory(root, options = {}) {
   return () => {
     disposed = true
     if (dispose) dispose()
+    root.remove()
   }
 }
 
@@ -1676,7 +1683,6 @@ const MARKUP = `
     </nav>
   </div>
   <footer class="footer">
-    <a class="wordmark" href="https://vibecoding.tech" target="_blank" rel="noopener">made with AI agents · <span>vibecoding.tech</span></a>
     <span class="footer-center debug-ui">DESIGNED BY YOU</span>
     <span class="hint debug-ui">
       <svg width="13" height="16" viewBox="0 0 13 16" fill="none"><rect x="2" y="1" width="9" height="14" rx="4.5" stroke="currentColor"></rect><path d="M6.5 4v3" stroke="currentColor" stroke-linecap="round"></path></svg>

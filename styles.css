@@ -115,7 +115,18 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 1.5rem; }
   margin-left: -50vw;
   z-index: 0;
 }
-.factory-bg .agentic-factory-3d { height: 100%; width: 100%; }
+/* Transparent so the machine sits on the page's navy + glow (no hard black seam). */
+.factory-bg .agentic-factory-3d { height: 100%; width: 100%; background: transparent; }
+/* Soft top fade to blend the scene into the masthead above it. */
+.factory-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 160px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, var(--bg), transparent);
+}
 .hero-content {
   position: relative;
   z-index: 2;
