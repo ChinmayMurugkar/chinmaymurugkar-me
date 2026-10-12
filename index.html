@@ -18,6 +18,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
+
+  <!-- Three.js for the 3D hero (no build step — resolved via import map) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
 </head>
 <body>
   <div class="glow" aria-hidden="true"></div>
@@ -42,17 +52,20 @@
   </header>
 
   <main>
-    <!-- Hero -->
-    <section id="home" class="hero">
-      <p class="eyebrow">Engineering Leader · Innovator · Author</p>
-      <h1>From Code to Cosmos:<br />Innovate Without Limits</h1>
-      <p class="lede">
-        Notes and deep-dives on artificial intelligence, large-scale systems, and the
-        algorithms underneath — written to be understood, not just skimmed.
-      </p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="#ai">Explore the topics</a>
-        <a class="btn btn-ghost" href="#contact">Contact me</a>
+    <!-- Hero with interactive 3D agentic factory behind the headline -->
+    <section id="home" class="hero hero-3d">
+      <div id="factory" class="factory-bg" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow">Engineering Leader · Innovator · Author</p>
+        <h1>From Code to Cosmos:<br />Innovate Without Limits</h1>
+        <p class="lede">
+          Notes and deep-dives on artificial intelligence, large-scale systems, and the
+          algorithms underneath — written to be understood, not just skimmed.
+        </p>
+        <div class="cta-row cta-left">
+          <a class="btn btn-primary" href="#ai">Explore the topics</a>
+          <a class="btn btn-ghost" href="#contact">Contact me</a>
+        </div>
       </div>
     </section>
 
@@ -227,5 +240,12 @@
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+
+  <!-- Mount the 3D agentic factory in the hero: embed mode, locked to "One order" -->
+  <script type="module">
+    import { mountAgenticFactory } from '/machine.js';
+    const root = document.getElementById('factory');
+    if (root) mountAgenticFactory(root, { embed: true, lockMode: 'order' });
+  </script>
 </body>
 </html>

@@ -95,6 +95,44 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 1.5rem; }
 }
 .lede { font-size: 1.15rem; color: var(--muted); max-width: 620px; margin-top: 1.5rem; }
 
+/* Hero with the 3D agentic factory behind it */
+.hero-3d {
+  position: relative;
+  padding: 0;
+  min-height: 88vh;
+  text-align: left;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: visible;
+}
+/* The machine breaks out of the content column to fill the full viewport width. */
+.factory-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  z-index: 0;
+}
+.factory-bg .agentic-factory-3d { height: 100%; width: 100%; }
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 560px;
+  pointer-events: none;
+}
+/* Keep the headline readable over the scene on narrow frames. */
+.hero-content h1 { text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55); }
+.hero-content .cta-row { pointer-events: auto; justify-content: flex-start; }
+.hero-content .btn { pointer-events: auto; }
+
+@media (max-width: 760px) {
+  .hero-3d { min-height: 78vh; }
+  .hero-content { max-width: 100%; }
+}
+
 /* Buttons */
 .cta-row { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; margin-top: 2rem; }
 .btn {
