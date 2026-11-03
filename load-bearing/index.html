@@ -10,5 +10,18 @@
   </head>
   <body>
     <div id="root"></div>
-  </body>
+    <!-- Vercel Web Analytics. Lessons are #/lesson/<id> links, which the script ignores, so report them as /load-bearing/lesson/<id>. -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    window.va("beforeSend", function (event) {
+      var u = new URL(event.url);
+      var route = u.hash.replace(/^#\/?/, "");
+      u.pathname = u.pathname.replace(/\/?$/, "/") + route;
+      u.hash = "";
+      return Object.assign({}, event, { url: u.toString() });
+    });
+    window.addEventListener("hashchange", function () { window.va("pageview", {}); });
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
 </html>
