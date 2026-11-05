@@ -416,3 +416,20 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: rgba(23
   .potrow { grid-template-columns: minmax(180px, 240px) 1fr; align-items: center; }
   .potrow .dishes { padding-left: 0; }
 }
+
+/* ---------- link back to the main site ---------- */
+.sitehome {
+  display: inline-flex; align-items: center; gap: 4px; justify-self: start; width: max-content;
+  padding: 6px 12px 6px 8px; border-radius: 999px; text-decoration: none;
+  font-size: .8rem; font-weight: 600; color: var(--ink-2);
+  background: rgba(255,255,255,.7); border: 1px solid var(--glass-line); box-shadow: 0 6px 14px -10px rgba(110, 30, 80, .5);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+}
+.sitehome svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.sitehome:hover { color: var(--pink); }
+.sitehome.top { margin: 0 0 10px; }
+.sitehome.side { display: none; }
+@media (min-width: 960px) {
+  .sitehome.top { display: none; }
+  .sitehome.side { display: inline-flex; position: absolute; left: 22px; bottom: 86px; }
+}
