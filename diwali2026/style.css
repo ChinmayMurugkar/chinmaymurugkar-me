@@ -433,3 +433,20 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: rgba(23
   .sitehome.top { display: none; }
   .sitehome.side { display: inline-flex; position: absolute; left: 22px; bottom: 86px; }
 }
+
+/* potluck: open editing under any name */
+.potrow .who { flex-wrap: nowrap; }
+.potrow .nm { flex: 1; min-width: 0; }
+.addbtn { flex-shrink: 0; min-height: 36px; padding: 6px 12px; font-size: .84rem; color: var(--pink); }
+.potrow.open { border-color: rgba(236, 79, 138, .45); box-shadow: 0 14px 30px -18px rgba(236, 79, 138, .6); }
+.potrow .dishes { display: grid; gap: 6px; padding-left: 0; }
+.dishrow { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-height: 40px; }
+.dishrow .tools { display: flex; flex-shrink: 0; }
+.dishrow .btn-ghost { padding: 4px 8px; min-height: 32px; font-size: .8rem; color: var(--muted); }
+.dishrow .btn-ghost:hover { color: var(--pink); }
+.ditem { min-width: 0; overflow-wrap: anywhere; }
+.formfor { margin: 0; font-size: .82rem; font-weight: 700; color: var(--pink); }
+.potfoot { margin: 14px 0 0; font-size: .9rem; color: var(--muted); }
+@media (min-width: 960px) {
+  .potrow { grid-template-columns: minmax(220px, 300px) 1fr; align-items: start; }
+}

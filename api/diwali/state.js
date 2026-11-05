@@ -20,7 +20,7 @@ export default route(['GET'], async (req) => {
     }
     const mine = !!th && r.th === th;
     const myDishes = (byRsvp[r.id] || []).map((d) => ({ id: d.id, type: d.type, item: d.item }));
-    if (r.status !== 'no') guests.push({ name: shortName(r.name), status: r.status, adults: r.adults, kids: r.kids, mine, dishes: myDishes });
+    if (r.status !== 'no') guests.push({ id: r.id, name: shortName(r.name), status: r.status, adults: r.adults, kids: r.kids, mine, dishes: myDishes });
     if (mine) me = { name: r.name, status: r.status, adults: r.adults, kids: r.kids, diet: r.diet, note: r.note, dishes: myDishes };
   }
   return { me, counts, guests };
