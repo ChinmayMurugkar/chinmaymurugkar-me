@@ -12,28 +12,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/diwali2026/style.css" />
   <style>
-    .wrap { max-width: 980px; }
+    .wrap { position: relative; z-index: 2; max-width: 1040px; margin: 0 auto; padding: 20px 16px 60px; display: grid; gap: 16px; }
+    .card h2 { font: 700 1.6rem/1.2 "Playfair Display", Georgia, serif; margin: 0 0 12px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    h1.admin { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; font-family: "Playfair Display", serif; }
+    .toast { bottom: 24px; }
     .adm { display: grid; gap: 16px; }
     h1.admin { font-size: 2rem; text-align: left; margin: 12px 0 0; }
     .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
     .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
-    .stat { padding: 12px; border-radius: 14px; background: rgba(0,0,0,.25); border: 1px solid var(--card-line); }
+    .stat { padding: 12px; border-radius: 14px; background: rgba(255,255,255,.65); border: 1px solid var(--card-line); }
     .stat b { display: block; font-size: 1.6rem; color: var(--gold); font-family: "Playfair Display", serif; }
     .stat span { font-size: .8rem; color: var(--muted); }
     .tbl { width: 100%; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: .9rem; }
-    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid rgba(246,196,83,.15); vertical-align: top; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid rgba(140,80,120,.14); vertical-align: top; }
     th { color: var(--gold); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
     td.note { max-width: 260px; white-space: pre-wrap; overflow-wrap: anywhere; }
     .st-going { color: var(--ok); } .st-maybe { color: var(--gold); } .st-no { color: var(--err); }
-    .acat { border-radius: 16px; background: rgba(0,0,0,.2); border: 1px solid var(--card-line); padding: 14px; display: grid; gap: 10px; }
+    .acat { border-radius: 16px; background: rgba(255,255,255,.55); border: 1px solid var(--card-line); padding: 14px; display: grid; gap: 10px; }
     .acat-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .acat-row input[name=name] { flex: 1 1 180px; width: auto; }
     .acat-row input[name=slots] { width: 80px; flex: 0 0 80px; }
     .acat-row select { width: auto; flex: 0 1 200px; }
     .acat-row .btn { min-height: 40px; }
     .claims { display: grid; gap: 6px; }
-    .claim { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 6px 10px; border-radius: 10px; background: rgba(255,255,255,.05); font-size: .92rem; }
+    .claim { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 6px 10px; border-radius: 10px; background: rgba(255,255,255,.8); font-size: .92rem; }
     .claim span { overflow-wrap: anywhere; }
     .small { font-size: .8rem; color: var(--muted); }
     .danger { color: var(--err); }
@@ -41,6 +44,7 @@
   </style>
 </head>
 <body>
+  <div class="bg" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
   <main class="wrap">
     <section class="card" id="login">
       <h2>Host admin 🪔</h2>

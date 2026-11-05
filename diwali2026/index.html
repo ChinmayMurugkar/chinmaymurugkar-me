@@ -6,7 +6,7 @@
   <title>Diwali Party 2026 · You're invited</title>
   <meta name="robots" content="noindex, nofollow" />
   <meta name="description" content="Friday, Nov 6 at 6 PM in San Jose. Chinmay, Isha & Shriyan Murugkar invite you to celebrate Diwali. RSVP and sign up for the potluck." />
-  <meta name="theme-color" content="#3a0a16" />
+  <meta name="theme-color" content="#fdf6ee" />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Murugkar Diwali" />
@@ -25,143 +25,199 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E🪔%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/diwali2026/style.css" />
 </head>
 <body>
+  <div class="bg" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i><i class="b5"></i></div>
   <canvas id="sky" aria-hidden="true"></canvas>
-  <div class="toran" aria-hidden="true"></div>
 
-  <main class="wrap">
-    <!-- HERO -->
-    <section class="hero card" aria-labelledby="title">
-      <svg class="rangoli" id="rangoli" viewBox="-100 -100 200 200" aria-hidden="true"></svg>
-      <p class="kicker">You're invited to</p>
-      <h1 id="title">Diwali Party <span>2026</span></h1>
-      <p class="hosts">Hosted by Chinmay, Isha &amp; Shriyan Murugkar</p>
-      <div class="diyas" aria-hidden="true">
-        <svg class="diya"><use href="#diya" /></svg>
-        <svg class="diya"><use href="#diya" /></svg>
-        <svg class="diya"><use href="#diya" /></svg>
-        <svg class="diya"><use href="#diya" /></svg>
-        <svg class="diya"><use href="#diya" /></svg>
-      </div>
-      <a class="btn btn-gold btn-big" href="#rsvp" id="heroRsvp">RSVP</a>
-    </section>
+  <!-- NAV: left sidebar on desktop, bottom tab bar on phones -->
+  <nav class="nav glass" aria-label="Sections">
+    <a class="brand" href="#home" aria-label="Diwali Party 2026 home">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#diyaIcon" /></svg>
+      <span><b>Diwali</b><small>Party 2026</small></span>
+    </a>
+    <a class="nav-link" href="#home" data-nav="home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5.5 9.5V20h13V9.5" /></svg><span>Invite</span>
+    </a>
+    <a class="nav-link" href="#details" data-nav="details">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3" /><path d="M3.5 10h17M8 3v4M16 3v4" /></svg><span>Details</span>
+    </a>
+    <a class="nav-link" href="#rsvp" data-nav="rsvp">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="3" /><path d="m3.5 7 8.5 6.5L20.5 7" /></svg><span>RSVP</span><em class="dot" id="navRsvpDot" hidden></em>
+    </a>
+    <a class="nav-link" href="#guests" data-nav="guests">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.5" /><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5" /><circle cx="17" cy="9.5" r="2.6" /><path d="M16.5 14.6c2.5.2 4.3 1.9 5 5.4" /></svg><span>Guests</span><em class="pill" id="navGuests" hidden></em>
+    </a>
+    <a class="nav-link" href="#potluck" data-nav="potluck">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18a9 9 0 0 1-18 0Z" /><path d="M8 8.5c0-1.5 1.5-1.5 1.5-3M12 8.5c0-1.5 1.5-1.5 1.5-3M16 8.5c0-1.5 1.5-1.5 1.5-3" /></svg><span>Potluck</span><em class="pill" id="navPot" hidden></em>
+    </a>
+    <div class="nav-foot">
+      <p>Fri, Nov 6 · 6 PM</p>
+      <p>San Jose</p>
+    </div>
+  </nav>
 
-    <!-- DETAILS -->
-    <section class="card details" aria-label="Event details">
-      <ul class="facts">
-        <li>
-          <span class="ico" aria-hidden="true">📅</span>
-          <div><strong>Friday, November 6, 2026</strong><span>6:00 PM onwards (Pacific)</span></div>
-        </li>
-        <li>
-          <span class="ico" aria-hidden="true">📍</span>
-          <div>
-            <strong>467 Minnesota Avenue</strong><span>San Jose, CA</span>
-            <a class="link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=467+Minnesota+Avenue%2C+San+Jose%2C+CA">Open in Google Maps ↗</a>
-          </div>
-        </li>
-        <li>
-          <span class="ico" aria-hidden="true">👗</span>
-          <div><strong>Traditional, deck up!</strong><span>Bring out your festive best</span></div>
-        </li>
-        <li>
-          <span class="ico" aria-hidden="true">✉️</span>
-          <div><strong>Please RSVP as soon as you can</strong><span>so we can plan food for everyone</span></div>
-        </li>
-      </ul>
+  <main class="views">
+    <!-- ============ INVITE ============ -->
+    <section class="view" id="home" data-view="home" aria-label="Invitation">
+      <div class="hero glass">
+        <div class="lanterns" aria-hidden="true">
+          <svg class="lantern l1" viewBox="0 0 60 150"><use href="#lantern" /></svg>
+          <svg class="lantern l2" viewBox="0 0 60 150"><use href="#lantern2" /></svg>
+          <svg class="lantern l3" viewBox="0 0 60 150"><use href="#lantern3" /></svg>
+        </div>
 
-      <div class="countdown" id="countdown" aria-live="off">
-        <div><b id="cdD">-</b><span>days</span></div>
-        <div><b id="cdH">-</b><span>hours</span></div>
-        <div><b id="cdM">-</b><span>mins</span></div>
-        <div><b id="cdS">-</b><span>secs</span></div>
-      </div>
-      <p class="cd-done" id="cdDone" hidden>✨ The party is on! Come on in. ✨</p>
-
-      <p class="cal-label">Add to calendar</p>
-      <div class="actions">
-        <a class="btn" href="/diwali2026/diwali2026.ics" download="diwali-party-2026.ics">📆 Apple</a>
-        <a class="btn" id="gcal" target="_blank" rel="noopener" href="#">📆 Google</a>
-        <button class="btn" id="shareBtn" type="button">🔗 Share invite</button>
-      </div>
-    </section>
-
-    <!-- MESSAGE -->
-    <section class="card message" aria-label="A note from the hosts">
-      <p>Diwali has always meant coming home: to light, to sweets shared off one another's plates, and to the people who make life brighter.</p>
-      <p>This year, we'd love for you to be part of ours. Come light a diya with us, fill your plate, dance a little, and stay late. Bring a dish if you can, but most of all bring yourselves. You are the best part of the celebration.</p>
-      <p class="sig">With love and light,<br />Chinmay, Isha &amp; Shriyan 🪔</p>
-    </section>
-
-    <!-- RSVP -->
-    <section class="card" id="rsvp" aria-labelledby="rsvpTitle">
-      <h2 id="rsvpTitle">Will you join us?</h2>
-      <div id="rsvpDone" class="done" hidden>
-        <p class="done-big" id="rsvpDoneMsg"></p>
-        <p class="muted" id="rsvpDoneSub"></p>
-        <div class="editlink">
-          <p><strong>Your private edit link.</strong> Save it to change your RSVP or potluck dish from another phone. Don't share it.</p>
-          <div class="copyrow">
-            <input id="editLink" readonly aria-label="Your private edit link" />
-            <button class="btn btn-sm" type="button" id="copyEdit">Copy</button>
+        <div class="art" id="art" aria-hidden="true">
+          <div class="art-inner">
+            <svg class="rangoli" id="rangoli" viewBox="-100 -100 200 200"></svg>
+            <div class="halo"></div>
+            <svg class="bigdiya" viewBox="0 0 200 170"><use href="#bigDiya" /></svg>
+            <span class="petal p1"></span><span class="petal p2"></span><span class="petal p3"></span><span class="petal p4"></span><span class="petal p5"></span><span class="petal p6"></span>
           </div>
         </div>
-        <button class="btn" type="button" id="changeRsvp">Change my RSVP</button>
+
+        <div class="hero-text">
+          <p class="kicker">You're invited</p>
+          <h1 class="happy" id="happy" aria-label="Happy Diwali">Happy Diwali</h1>
+          <p class="title">Diwali Party <span>2026</span></p>
+          <p class="hosts">Hosted by Chinmay, Isha &amp; Shriyan Murugkar</p>
+          <p class="when"><span>Fri, Nov 6</span><span>6:00 PM</span><span>San Jose</span></p>
+
+          <div class="countdown" id="countdown" aria-live="off">
+            <div><b id="cdD">-</b><span>days</span></div>
+            <div><b id="cdH">-</b><span>hrs</span></div>
+            <div><b id="cdM">-</b><span>min</span></div>
+            <div><b id="cdS">-</b><span>sec</span></div>
+          </div>
+          <p class="cd-done" id="cdDone" hidden>✨ The party is on! Come on in. ✨</p>
+
+          <div class="cta">
+            <a class="btn btn-gold btn-big" href="#rsvp" id="heroRsvp">RSVP</a>
+            <a class="btn btn-big" href="#potluck">Pick a dish</a>
+          </div>
+        </div>
       </div>
 
-      <form id="rsvpForm" novalidate>
-        <div class="seg" role="radiogroup" aria-label="Your response">
-          <label><input type="radio" name="status" value="going" required checked /><span>🎉 Going</span></label>
-          <label><input type="radio" name="status" value="maybe" /><span>🤔 Maybe</span></label>
-          <label><input type="radio" name="status" value="no" /><span>😢 Can't go</span></label>
-        </div>
-        <label class="field">
-          <span>Your name</span>
-          <input name="name" maxlength="60" autocomplete="name" required placeholder="First and last name" />
-        </label>
-        <div class="row2 if-coming">
-          <label class="field">
-            <span>Adults</span>
-            <div class="stepper"><button type="button" data-step="-1" aria-label="Fewer adults">−</button><input name="adults" type="number" inputmode="numeric" min="0" max="15" value="1" /><button type="button" data-step="1" aria-label="More adults">+</button></div>
-          </label>
-          <label class="field">
-            <span>Kids</span>
-            <div class="stepper"><button type="button" data-step="-1" aria-label="Fewer kids">−</button><input name="kids" type="number" inputmode="numeric" min="0" max="15" value="0" /><button type="button" data-step="1" aria-label="More kids">+</button></div>
-          </label>
-        </div>
-        <label class="field if-coming">
-          <span>Dietary needs <em>(optional)</em></span>
-          <input name="diet" maxlength="200" placeholder="e.g. Jain, no onion-garlic, nut allergy" />
-        </label>
-        <label class="field">
-          <span>Note to the hosts <em>(optional, only they see it)</em></span>
-          <textarea name="note" maxlength="500" rows="2" placeholder="Can't wait!"></textarea>
-        </label>
-        <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off" /></label>
-        <p class="err" id="rsvpErr" role="alert"></p>
-        <button class="btn btn-gold btn-block" type="submit" id="rsvpSubmit">Send RSVP</button>
-      </form>
+      <div class="card glass message">
+        <p>Diwali has always meant coming home: to light, to sweets shared off one another's plates, and to the people who make life brighter.</p>
+        <p>This year, we'd love for you to be part of ours. Come light a diya with us, fill your plate, dance a little, and stay late. Bring a dish if you can, but most of all bring yourselves. You are the best part of the celebration.</p>
+        <p class="sig">With love and light,<br />Chinmay, Isha &amp; Shriyan</p>
+      </div>
     </section>
 
-    <!-- GUESTS -->
-    <section class="card" aria-labelledby="guestTitle">
-      <h2 id="guestTitle">Who's coming</h2>
-      <p class="muted" id="guestSummary">Loading…</p>
-      <div id="guestList" class="guests"></div>
+    <!-- ============ DETAILS ============ -->
+    <section class="view" id="details" data-view="details" aria-labelledby="detailsTitle" hidden>
+      <h2 class="view-title" id="detailsTitle">The details</h2>
+      <div class="tiles">
+        <div class="tile glass">
+          <span class="ico i-gold" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3" /><path d="M3.5 10h17M8 3v4M16 3v4" /></svg></span>
+          <div><h3>When</h3><p><strong>Friday, November 6, 2026</strong><br />6:00 PM onwards (Pacific)</p></div>
+        </div>
+        <div class="tile glass">
+          <span class="ico i-pink" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" /><circle cx="12" cy="9.5" r="2.5" /></svg></span>
+          <div><h3>Where</h3><p><strong>467 Minnesota Avenue</strong><br />San Jose, CA</p>
+          <a class="link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=467+Minnesota+Avenue%2C+San+Jose%2C+CA">Open in Google Maps ↗</a></div>
+        </div>
+        <div class="tile glass">
+          <span class="ico i-violet" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 3.5 7 6l-3.5 1.5L5 12h2v8.5h10V12h2l1.5-4.5L17 6l-2-2.5c-.7 1.3-1.7 2-3 2s-2.3-.7-3-2Z" /></svg></span>
+          <div><h3>Dress code</h3><p><strong>Traditional, deck up!</strong><br />Bring out your festive best</p></div>
+        </div>
+        <div class="tile glass">
+          <span class="ico i-teal" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="3" /><path d="m3.5 7 8.5 6.5L20.5 7" /></svg></span>
+          <div><h3>RSVP</h3><p><strong>As soon as you can</strong><br />so we can plan food for everyone</p></div>
+        </div>
+      </div>
+
+      <div class="card glass map-card">
+        <iframe title="Map to 467 Minnesota Avenue, San Jose" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=467+Minnesota+Avenue,+San+Jose,+CA&amp;output=embed"></iframe>
+      </div>
+
+      <div class="card glass">
+        <p class="cal-label">Add to calendar</p>
+        <div class="actions">
+          <a class="btn" href="/diwali2026/diwali2026.ics" download="diwali-party-2026.ics">Apple / Outlook</a>
+          <a class="btn" id="gcal" target="_blank" rel="noopener" href="#">Google Calendar</a>
+          <button class="btn btn-gold" id="shareBtn" type="button">Share the invite</button>
+        </div>
+      </div>
     </section>
 
-    <!-- POTLUCK -->
-    <section class="card" id="potluck" aria-labelledby="potTitle">
-      <h2 id="potTitle">Potluck</h2>
-      <p class="muted">Pick an open spot and tell us what you're bringing. One dish each is plenty, but you're welcome to grab another or add it under Others.</p>
+    <!-- ============ RSVP ============ -->
+    <section class="view" id="rsvp" data-view="rsvp" aria-labelledby="rsvpTitle" hidden>
+      <h2 class="view-title" id="rsvpTitle">Will you join us?</h2>
+      <div class="card glass narrow">
+        <div id="rsvpDone" class="done" hidden>
+          <p class="done-big" id="rsvpDoneMsg"></p>
+          <p class="muted" id="rsvpDoneSub"></p>
+          <div class="editlink">
+            <p><strong>Your private edit link.</strong> Save it to change your RSVP or potluck dish from another phone. Don't share it.</p>
+            <div class="copyrow">
+              <input id="editLink" readonly aria-label="Your private edit link" />
+              <button class="btn btn-sm" type="button" id="copyEdit">Copy</button>
+            </div>
+          </div>
+          <div class="actions">
+            <a class="btn btn-gold" href="#potluck">Pick a potluck dish →</a>
+            <button class="btn" type="button" id="changeRsvp">Change my RSVP</button>
+          </div>
+        </div>
+
+        <form id="rsvpForm" novalidate>
+          <div class="seg" role="radiogroup" aria-label="Your response">
+            <label><input type="radio" name="status" value="going" required checked /><span>🎉 Going</span></label>
+            <label><input type="radio" name="status" value="maybe" /><span>🤔 Maybe</span></label>
+            <label><input type="radio" name="status" value="no" /><span>😢 Can't go</span></label>
+          </div>
+          <label class="field">
+            <span>Your name</span>
+            <input name="name" maxlength="60" autocomplete="name" required placeholder="First and last name" />
+          </label>
+          <div class="row2 if-coming">
+            <label class="field">
+              <span>Adults</span>
+              <div class="stepper"><button type="button" data-step="-1" aria-label="Fewer adults">−</button><input name="adults" type="number" inputmode="numeric" min="0" max="15" value="1" /><button type="button" data-step="1" aria-label="More adults">+</button></div>
+            </label>
+            <label class="field">
+              <span>Kids</span>
+              <div class="stepper"><button type="button" data-step="-1" aria-label="Fewer kids">−</button><input name="kids" type="number" inputmode="numeric" min="0" max="15" value="0" /><button type="button" data-step="1" aria-label="More kids">+</button></div>
+            </label>
+          </div>
+          <label class="field if-coming">
+            <span>Dietary needs <em>(optional)</em></span>
+            <input name="diet" maxlength="200" placeholder="e.g. Jain, no onion-garlic, nut allergy" />
+          </label>
+          <label class="field">
+            <span>Note to the hosts <em>(optional, only they see it)</em></span>
+            <textarea name="note" maxlength="500" rows="2" placeholder="Can't wait!"></textarea>
+          </label>
+          <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+          <p class="err" id="rsvpErr" role="alert"></p>
+          <button class="btn btn-gold btn-block" type="submit" id="rsvpSubmit">Send RSVP</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ GUESTS ============ -->
+    <section class="view" id="guests" data-view="guests" aria-labelledby="guestTitle" hidden>
+      <h2 class="view-title" id="guestTitle">Who's coming</h2>
+      <div class="card glass">
+        <p class="summary" id="guestSummary">Loading…</p>
+        <div id="guestList" class="guests"></div>
+      </div>
+    </section>
+
+    <!-- ============ POTLUCK ============ -->
+    <section class="view" id="potluck" data-view="potluck" aria-labelledby="potTitle" hidden>
+      <h2 class="view-title" id="potTitle">Potluck</h2>
+      <p class="lede">Pick an open spot and tell us what you're bringing. One dish each is plenty, but you're welcome to grab another or add it under Others.</p>
       <div id="potSummary" class="chips" aria-label="Potluck summary"></div>
       <p class="err" id="potErr" role="alert"></p>
       <div id="cats" class="cats"><p class="muted">Loading…</p></div>
 
-      <details class="newcat">
+      <details class="newcat glass">
         <summary>＋ Add a new category (e.g. Snacks, Drinks)</summary>
         <form id="catForm" novalidate>
           <label class="field"><span>Category name</span><input name="name" maxlength="30" required placeholder="Drinks" /></label>
@@ -179,30 +235,96 @@
       </details>
     </section>
 
-    <footer class="foot">
-      <p>Made with 🪔 by the Murugkars · <a href="https://www.chinmaymurugkar.com/">chinmaymurugkar.com</a></p>
-    </footer>
+    <footer class="foot">Made with love by the Murugkars · <a href="https://www.chinmaymurugkar.com/">chinmaymurugkar.com</a></footer>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <!-- ============ SVG ART ============ -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
-      <radialGradient id="flameG" cx="50%" cy="70%" r="60%">
-        <stop offset="0%" stop-color="#fff7c2" />
-        <stop offset="45%" stop-color="#ffc53d" />
-        <stop offset="100%" stop-color="#ff6a00" />
+      <radialGradient id="flameG" cx="50%" cy="72%" r="65%">
+        <stop offset="0%" stop-color="#fffbe0" />
+        <stop offset="35%" stop-color="#ffe066" />
+        <stop offset="70%" stop-color="#ff9a1f" />
+        <stop offset="100%" stop-color="#ff4d2e" />
       </radialGradient>
-      <linearGradient id="clayG" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#e2783a" />
-        <stop offset="100%" stop-color="#8f3214" />
+      <radialGradient id="flameCore" cx="50%" cy="70%" r="50%">
+        <stop offset="0%" stop-color="#ffffff" />
+        <stop offset="100%" stop-color="#fff3b0" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="bowlG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ff9a5a" />
+        <stop offset="45%" stop-color="#e2573a" />
+        <stop offset="100%" stop-color="#8e2443" />
       </linearGradient>
-      <symbol id="diya" viewBox="0 0 64 64">
-        <ellipse class="glow" cx="32" cy="22" rx="18" ry="18" fill="#ffb627" opacity=".25" />
-        <path class="flame" d="M32 6c5 8 7 12 7 16a7 7 0 0 1-14 0c0-4 2-8 7-16z" fill="url(#flameG)" />
-        <path d="M6 36h52c-2 12-12 20-26 20S8 48 6 36z" fill="url(#clayG)" />
-        <path d="M6 36h52" stroke="#ffd27a" stroke-width="2" stroke-linecap="round" />
-        <path d="M16 44l4 3 4-3 4 3 4-3 4 3 4-3 4 3 4-3" fill="none" stroke="#ffd27a" stroke-width="1.6" stroke-linecap="round" opacity=".8" />
+      <radialGradient id="bowlShine" cx="30%" cy="20%" r="60%">
+        <stop offset="0%" stop-color="#fff" stop-opacity=".75" />
+        <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="rimG" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#b8860b" />
+        <stop offset="30%" stop-color="#ffe9a8" />
+        <stop offset="55%" stop-color="#f5b82e" />
+        <stop offset="100%" stop-color="#a86b00" />
+      </linearGradient>
+      <linearGradient id="oilG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffd76a" />
+        <stop offset="100%" stop-color="#d98e04" />
+      </linearGradient>
+      <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" /></filter>
+      <linearGradient id="lanA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8fb8" /><stop offset="1" stop-color="#e2366f" /></linearGradient>
+      <linearGradient id="lanB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd27a" /><stop offset="1" stop-color="#f08a12" /></linearGradient>
+      <linearGradient id="lanC" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9ff0e4" /><stop offset="1" stop-color="#1fa596" /></linearGradient>
+
+      <symbol id="bigDiya" viewBox="0 0 200 170">
+        <ellipse cx="100" cy="158" rx="70" ry="9" fill="#7a2a4a" opacity=".18" />
+        <g class="flame-g">
+          <ellipse class="flame-glow" cx="100" cy="52" rx="34" ry="40" fill="#ffc94a" opacity=".45" filter="url(#soft)" />
+          <path class="flame" d="M100 8c12 20 20 32 20 44a20 20 0 0 1-40 0c0-12 8-24 20-44z" fill="url(#flameG)" />
+          <ellipse cx="100" cy="60" rx="7" ry="11" fill="url(#flameCore)" />
+        </g>
+        <path d="M100 76v8" stroke="#3b2a1a" stroke-width="3" stroke-linecap="round" />
+        <path d="M18 92c6 34 40 56 82 56s76-22 82-56Z" fill="url(#bowlG)" />
+        <path d="M18 92c6 34 40 56 82 56s76-22 82-56Z" fill="url(#bowlShine)" />
+        <ellipse cx="100" cy="92" rx="82" ry="14" fill="url(#rimG)" />
+        <ellipse cx="100" cy="92" rx="70" ry="9" fill="url(#oilG)" />
+        <g fill="none" stroke="#ffe9a8" stroke-width="2.4" stroke-linecap="round" opacity=".9">
+          <path d="M40 116c8 6 16 6 24 0s16-6 24 0 16 6 24 0 16-6 24 0 16 6 24 0" />
+        </g>
+        <g fill="#ffe9a8"><circle cx="52" cy="132" r="3" /><circle cx="76" cy="138" r="3" /><circle cx="100" cy="140" r="3" /><circle cx="124" cy="138" r="3" /><circle cx="148" cy="132" r="3" /></g>
+      </symbol>
+
+      <symbol id="diyaIcon" viewBox="0 0 64 64">
+        <path d="M32 6c5 8 7 12 7 16a7 7 0 0 1-14 0c0-4 2-8 7-16z" fill="url(#flameG)" />
+        <path d="M6 36c2 12 12 20 26 20s24-8 26-20Z" fill="url(#bowlG)" />
+        <ellipse cx="32" cy="36" rx="26" ry="5" fill="url(#rimG)" />
+      </symbol>
+
+      <!-- Akash kandil lanterns -->
+      <symbol id="lantern" viewBox="0 0 60 150">
+        <path d="M30 0v38" stroke="#c99a2e" stroke-width="1.2" />
+        <path d="M30 38 52 62 30 104 8 62Z" fill="url(#lanA)" />
+        <path d="M30 38 52 62 30 104 8 62Z" fill="url(#bowlShine)" />
+        <path d="M8 62h44M30 38v66" stroke="#fff" stroke-opacity=".6" fill="none" />
+        <circle cx="30" cy="62" r="6" fill="#fff6c9" opacity=".9" />
+        <path d="M30 104v14M24 104l-4 40M36 104l4 40M30 118v30" stroke="#e2366f" stroke-width="1.4" />
+      </symbol>
+      <symbol id="lantern2" viewBox="0 0 60 150">
+        <path d="M30 0v38" stroke="#c99a2e" stroke-width="1.2" />
+        <path d="M30 38 52 62 30 104 8 62Z" fill="url(#lanB)" />
+        <path d="M30 38 52 62 30 104 8 62Z" fill="url(#bowlShine)" />
+        <path d="M8 62h44M30 38v66" stroke="#fff" stroke-opacity=".6" fill="none" />
+        <circle cx="30" cy="62" r="6" fill="#fff6c9" opacity=".9" />
+        <path d="M30 104v14M24 104l-4 40M36 104l4 40M30 118v30" stroke="#f08a12" stroke-width="1.4" />
+      </symbol>
+      <symbol id="lantern3" viewBox="0 0 60 150">
+        <path d="M30 0v38" stroke="#c99a2e" stroke-width="1.2" />
+        <path d="M30 38 52 62 30 104 8 62Z" fill="url(#lanC)" />
+        <path d="M30 38 52 62 30 104 8 62Z" fill="url(#bowlShine)" />
+        <path d="M8 62h44M30 38v66" stroke="#fff" stroke-opacity=".6" fill="none" />
+        <circle cx="30" cy="62" r="6" fill="#fff6c9" opacity=".9" />
+        <path d="M30 104v14M24 104l-4 40M36 104l4 40M30 118v30" stroke="#1fa596" stroke-width="1.4" />
       </symbol>
     </defs>
   </svg>

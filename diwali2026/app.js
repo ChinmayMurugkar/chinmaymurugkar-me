@@ -87,16 +87,32 @@
     }
   }
 
-  // ---------- rangoli ----------
+  // ---------- "Happy Diwali" letters (staggered 3D rise + shimmer) ----------
+  (function letters() {
+    const el = $('happy');
+    const txt = el.textContent;
+    el.textContent = '';
+    [...txt].forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.setAttribute('aria-hidden', 'true');
+      if (ch === ' ') s.className = 'sp';
+      else { s.className = 'ch'; s.textContent = ch; s.style.setProperty('--i', i); }
+      el.append(s);
+    });
+  })();
+
+  // ---------- rangoli (floor art under the diya) ----------
   (function rangoli() {
     const svg = $('rangoli');
     const NS = 'http://www.w3.org/2000/svg';
     const add = (tag, a) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); svg.append(e); return e; };
+    add('circle', { r: 99, fill: '#fff', opacity: .55 });
     const rings = [
-      { n: 16, r: 88, len: 14, w: 7, c: '#f6c453' },
-      { n: 12, r: 66, len: 20, w: 10, c: '#e8457a' },
-      { n: 8, r: 42, len: 22, w: 13, c: '#f28c18' },
-      { n: 8, r: 20, len: 16, w: 9, c: '#19a59a' },
+      { n: 20, r: 90, len: 9, w: 5, c: '#a35cff' },
+      { n: 16, r: 76, len: 13, w: 7, c: '#f5b82e' },
+      { n: 12, r: 56, len: 18, w: 10, c: '#ec4f8a' },
+      { n: 8, r: 34, len: 18, w: 11, c: '#ff8a3d' },
+      { n: 8, r: 15, len: 11, w: 7, c: '#14a394' },
     ];
     rings.forEach((ring, ri) => {
       for (let i = 0; i < ring.n; i++) {
@@ -107,62 +123,108 @@
           fill: ring.c, transform: `rotate(${a})`,
         });
       }
-      add('circle', { r: ring.r - ring.len - 4, fill: 'none', stroke: '#fff3dc', 'stroke-width': 1, 'stroke-dasharray': '2 4', opacity: .7 });
+      add('circle', { r: ring.r - ring.len - 3, fill: 'none', stroke: '#b7791f', 'stroke-width': .8, 'stroke-dasharray': '1.5 3.5', opacity: .6 });
     });
-    for (let i = 0; i < 24; i++) add('circle', { r: 2.4, cx: 0, cy: -98, fill: '#fff3dc', transform: `rotate(${i * 15})` });
-    add('circle', { r: 7, fill: '#f6c453' });
+    for (let i = 0; i < 36; i++) add('circle', { r: 1.8, cy: -97, fill: i % 2 ? '#ec4f8a' : '#f5b82e', transform: `rotate(${i * 10})` });
+    add('circle', { r: 6, fill: '#f5b82e' });
   })();
 
-  // ---------- sparkles & fireworks ----------
+  // ---------- fireworks & glitter (colorful on a light sky) ----------
   (function sky() {
     if (reduceMotion) return;
     const c = $('sky'), ctx = c.getContext('2d');
-    let W, H, dpr, sparks = [], bursts = [], raf = 0, nextBurst = 0;
-    const COLORS = ['#f6c453', '#ffdf8a', '#f28c18', '#e8457a', '#fff3dc', '#7fe3d6'];
+    let W, H, dpr, glitter = [], parts = [], rockets = [], raf = 0, nextBurst = 0;
+    const PALETTES = [
+      ['#ff5e8a', '#ffb3c9', '#ff9f43'], ['#a35cff', '#d4b8ff', '#ff5e8a'], ['#f59e0b', '#ffd27a', '#ff8a3d'],
+      ['#14a394', '#7fe6d6', '#3b82f6'], ['#ec4f8a', '#f5b82e', '#a35cff'],
+    ];
+    const GL = ['#f5b82e', '#ec4f8a', '#a35cff', '#14a394', '#ff8a3d'];
     function size() {
       dpr = Math.min(2, window.devicePixelRatio || 1);
       W = c.width = innerWidth * dpr; H = c.height = innerHeight * dpr;
-      sparks = Array.from({ length: Math.round(Math.min(70, innerWidth / 8)) }, () => ({
-        x: Math.random() * W, y: Math.random() * H, r: (Math.random() * 1.4 + .4) * dpr,
-        p: Math.random() * Math.PI * 2, s: Math.random() * .02 + .008, vy: (Math.random() * .15 + .05) * dpr,
+      glitter = Array.from({ length: Math.round(Math.min(46, innerWidth / 14)) }, () => ({
+        x: Math.random() * W, y: Math.random() * H, r: (Math.random() * 1.6 + .6) * dpr,
+        p: Math.random() * 6.3, s: Math.random() * .03 + .01, vy: (Math.random() * .2 + .06) * dpr, col: GL[(Math.random() * GL.length) | 0],
       }));
     }
-    function burst(t) {
-      const x = W * (.15 + Math.random() * .7), y = H * (.08 + Math.random() * .3);
-      const col = COLORS[(Math.random() * COLORS.length) | 0];
-      const n = 46;
+    function launch(xf) {
+      const x = W * (xf ?? (.12 + Math.random() * .76));
+      rockets.push({ x, y: H + 10, vy: -(H * (.0105 + Math.random() * .004)), ty: H * (.12 + Math.random() * .28), pal: PALETTES[(Math.random() * PALETTES.length) | 0] });
+    }
+    function explode(x, y, pal) {
+      const n = 70, ring = Math.random() < .5;
       for (let i = 0; i < n; i++) {
-        const a = (Math.PI * 2 * i) / n, v = (Math.random() * 1.2 + 1.6) * dpr;
-        bursts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, col });
+        const a = (Math.PI * 2 * i) / n + Math.random() * .05;
+        const v = (ring ? 3.2 : Math.random() * 3.4 + .6) * dpr;
+        parts.push({ x, y, px: x, py: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, decay: .010 + Math.random() * .008, col: pal[i % pal.length], r: (Math.random() * 1.2 + 1.4) * dpr });
       }
-      nextBurst = t + 2600 + Math.random() * 3500;
     }
     function frame(t) {
       ctx.clearRect(0, 0, W, H);
-      for (const s of sparks) {
-        s.p += s.s; s.y -= s.vy; if (s.y < -5) { s.y = H + 5; s.x = Math.random() * W; }
-        ctx.globalAlpha = .25 + .55 * (Math.sin(s.p) * .5 + .5);
-        ctx.fillStyle = '#f6c453';
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 7); ctx.fill();
+      for (const g of glitter) {
+        g.p += g.s; g.y -= g.vy; if (g.y < -5) { g.y = H + 5; g.x = Math.random() * W; }
+        const tw = Math.sin(g.p) * .5 + .5;
+        ctx.globalAlpha = .2 + .6 * tw; ctx.fillStyle = g.col;
+        ctx.beginPath(); ctx.moveTo(g.x, g.y - g.r * 2.2 * tw); ctx.lineTo(g.x + g.r * .7, g.y); ctx.lineTo(g.x, g.y + g.r * 2.2 * tw); ctx.lineTo(g.x - g.r * .7, g.y); ctx.fill();
       }
-      if (t > nextBurst) burst(t);
-      bursts = bursts.filter((b) => b.life > 0);
-      for (const b of bursts) {
-        b.x += b.vx; b.y += b.vy; b.vy += .025 * dpr; b.vx *= .985; b.vy *= .985; b.life -= .012;
-        ctx.globalAlpha = Math.max(0, b.life) * .8;
-        ctx.fillStyle = b.col;
-        ctx.beginPath(); ctx.arc(b.x, b.y, 1.6 * dpr, 0, 7); ctx.fill();
+      if (t > nextBurst) { launch(); nextBurst = t + 2200 + Math.random() * 2800; }
+      rockets = rockets.filter((r) => {
+        r.y += r.vy; r.vy *= .985;
+        ctx.globalAlpha = .9; ctx.fillStyle = r.pal[0];
+        ctx.beginPath(); ctx.arc(r.x, r.y, 2 * dpr, 0, 7); ctx.fill();
+        ctx.globalAlpha = .35; ctx.fillRect(r.x - .6 * dpr, r.y, 1.2 * dpr, 26 * dpr);
+        if (r.y <= r.ty || r.vy > -1) { explode(r.x, r.y, r.pal); return false; }
+        return true;
+      });
+      parts = parts.filter((p) => p.life > 0);
+      ctx.lineCap = 'round';
+      for (const p of parts) {
+        p.px = p.x; p.py = p.y;
+        p.x += p.vx; p.y += p.vy; p.vy += .03 * dpr; p.vx *= .975; p.vy *= .975; p.life -= p.decay;
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.strokeStyle = p.col; ctx.lineWidth = p.r;
+        ctx.beginPath(); ctx.moveTo(p.px - p.vx * 2, p.py - p.vy * 2); ctx.lineTo(p.x, p.y); ctx.stroke();
       }
       ctx.globalAlpha = 1;
       raf = requestAnimationFrame(frame);
     }
     size();
     addEventListener('resize', size);
-    nextBurst = performance.now() + 1200;
+    // opening salvo for the "Happy Diwali" entrance
+    [.25, .75, .5, .15, .85].forEach((xf, i) => setTimeout(() => launch(xf), 250 + i * 330));
+    nextBurst = performance.now() + 4500;
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) cancelAnimationFrame(raf); else raf = requestAnimationFrame(frame);
+      cancelAnimationFrame(raf);
+      if (!document.hidden) raf = requestAnimationFrame(frame);
     });
     raf = requestAnimationFrame(frame);
+  })();
+
+  // ---------- 3D tilt on the hero art ----------
+  (function tilt() {
+    if (reduceMotion) return;
+    const hero = document.querySelector('.hero'), inner = document.querySelector('.art-inner');
+    if (!hero || !inner) return;
+    hero.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const r = hero.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      inner.style.setProperty('--ry', (x * 18).toFixed(2) + 'deg');
+      inner.style.setProperty('--rx', (-y * 12).toFixed(2) + 'deg');
+    });
+    hero.addEventListener('pointerleave', () => { inner.style.setProperty('--ry', '0deg'); inner.style.setProperty('--rx', '0deg'); });
+    // phones: a gentle automatic sway so the scene still feels 3D
+    if (matchMedia('(hover: none)').matches) {
+      let t0 = performance.now();
+      const loop = (t) => {
+        const k = (t - t0) / 1000;
+        inner.style.setProperty('--ry', (Math.sin(k * .6) * 8).toFixed(2) + 'deg');
+        inner.style.setProperty('--rx', (Math.cos(k * .45) * 4).toFixed(2) + 'deg');
+        if (!document.hidden && location.hash.replace('#', '') in { '': 1, home: 1 }) requestAnimationFrame(loop);
+        else setTimeout(() => requestAnimationFrame(loop), 600);
+      };
+      requestAnimationFrame(loop);
+    }
   })();
 
   // ---------- countdown ----------
@@ -248,7 +310,8 @@
     $('rsvpDone').hidden = !showDone;
     form.hidden = !!showDone;
     $('rsvpTitle').textContent = me ? 'Your RSVP' : 'Will you join us?';
-    $('heroRsvp').textContent = me ? 'View your RSVP' : 'RSVP';
+    $('heroRsvp').textContent = me ? 'Your RSVP' : 'RSVP';
+    $('navRsvpDot').hidden = !!me;
     if (showDone) {
       const first = me.name.split(/\s+/)[0];
       const ppl = me.adults + me.kids;
@@ -280,7 +343,7 @@
       rsvpEditing = false;
       await refresh();
       toast(d.updated ? 'RSVP updated ✓' : 'RSVP sent ✓');
-      $('rsvp').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
     } catch (ex) {
       err.textContent = ex.message;
     } finally { btn.disabled = false; }
@@ -291,7 +354,7 @@
   $('copyEdit').addEventListener('click', async () => toast((await copy(editUrl())) ? 'Private link copied. Save it somewhere safe.' : 'Copy the link manually.'));
 
   // ---------- guests ----------
-  const AV = ['#f6c453', '#f28c18', '#e8457a', '#7fe3d6', '#ffdf8a', '#c79bff'];
+  const AV = ['linear-gradient(140deg,#ffc56b,#f08a12)', 'linear-gradient(140deg,#ff9ec2,#e2366f)', 'linear-gradient(140deg,#c9b6ff,#7c4dff)', 'linear-gradient(140deg,#8cf0e2,#14a394)', 'linear-gradient(140deg,#93c5fd,#3b82f6)', 'linear-gradient(140deg,#fdba74,#ea580c)'];
   function renderGuests() {
     const c = state.counts;
     const g = c.going, m = c.maybe;
@@ -311,6 +374,8 @@
             p.name, extra > 0 ? h('span', { class: 'plus' }, '+' + extra) : null);
         })));
     });
+    const ppl0 = g.adults + g.kids;
+    $('navGuests').hidden = !ppl0; $('navGuests').textContent = ppl0;
     $('guestList').replaceChildren(...groups.filter(Boolean));
   }
 
@@ -326,6 +391,8 @@
         ? h('span', { class: 'chip' }, `${c.name} ${c.claims.length ? '· ' + c.claims.length : ''}`)
         : h('span', { class: 'chip ' + (isFull(c) ? 'full' : 'need') }, `${c.name} ${taken(c)}/${c.slots}${isFull(c) ? ' ✓' : ''}`)));
 
+    const openSpots = state.cats.reduce((n, c) => n + (isOpenEnded(c) ? 0 : Math.max(0, c.slots - taken(c))), 0);
+    $('navPot').hidden = !openSpots; $('navPot').textContent = openSpots; $('navPot').title = openSpots + ' open spots';
     if (!state.cats.length) { $('cats').replaceChildren(h('p', { class: 'muted' }, 'No potluck categories yet.')); return; }
     $('cats').replaceChildren(...state.cats.map(renderCat));
     const f = document.querySelector('.claimform input[name=dish]');
@@ -463,6 +530,29 @@
     if (document.activeElement && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
     refresh();
   }, 20000);
+
+  // ---------- one-page router: one section at a time ----------
+  const VIEWS = [...document.querySelectorAll('[data-view]')].map((v) => v.dataset.view);
+  function route() {
+    const h = decodeURIComponent(location.hash.slice(1));
+    let view = VIEWS.includes(h) ? h : null, target = null;
+    if (!view && h) { // deep link to something inside a view, e.g. #cat-sweets
+      target = document.getElementById(h);
+      const host = target && target.closest('[data-view]');
+      view = host ? host.dataset.view : null;
+    }
+    view = view || 'home';
+    document.querySelectorAll('[data-view]').forEach((v) => { v.hidden = v.dataset.view !== view; });
+    document.querySelectorAll('[data-nav]').forEach((a) => {
+      const on = a.dataset.nav === view;
+      a.classList.toggle('active', on);
+      if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+    if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' }));
+    else window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+  addEventListener('hashchange', route);
+  route();
 
   syncStatus();
   refresh();
