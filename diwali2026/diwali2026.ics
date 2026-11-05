@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Murugkar//Diwali 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:diwali2026@chinmaymurugkar.com
+DTSTAMP:20261104T000000Z
+DTSTART:20261107T020000Z
+DTEND:20261107T060000Z
+SUMMARY:Diwali Party 2026 🪔
+LOCATION:467 Minnesota Avenue\, San Jose\, CA
+DESCRIPTION:Diwali celebration hosted by Chinmay\, Isha & Shriyan Murugkar.\nDress: traditional\, deck up!\nRSVP & potluck: https://www.chinmaymurugkar.com/diwali2026
+URL:https://www.chinmaymurugkar.com/diwali2026
+BEGIN:VALARM
+TRIGGER:-PT3H
+ACTION:DISPLAY
+DESCRIPTION:Diwali Party tonight at 6 PM
+END:VALARM
+END:VEVENT
+END:VCALENDAR

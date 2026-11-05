@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diwali Host Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#3a0a16" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E🪔%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/diwali2026/style.css" />
+  <style>
+    .wrap { max-width: 980px; }
+    .adm { display: grid; gap: 16px; }
+    h1.admin { font-size: 2rem; text-align: left; margin: 12px 0 0; }
+    .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+    .stat { padding: 12px; border-radius: 14px; background: rgba(0,0,0,.25); border: 1px solid var(--card-line); }
+    .stat b { display: block; font-size: 1.6rem; color: var(--gold); font-family: "Playfair Display", serif; }
+    .stat span { font-size: .8rem; color: var(--muted); }
+    .tbl { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid rgba(246,196,83,.15); vertical-align: top; }
+    th { color: var(--gold); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
+    td.note { max-width: 260px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .st-going { color: var(--ok); } .st-maybe { color: var(--gold); } .st-no { color: var(--err); }
+    .acat { border-radius: 16px; background: rgba(0,0,0,.2); border: 1px solid var(--card-line); padding: 14px; display: grid; gap: 10px; }
+    .acat-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .acat-row input[name=name] { flex: 1 1 180px; width: auto; }
+    .acat-row input[name=slots] { width: 80px; flex: 0 0 80px; }
+    .acat-row select { width: auto; flex: 0 1 200px; }
+    .acat-row .btn { min-height: 40px; }
+    .claims { display: grid; gap: 6px; }
+    .claim { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 6px 10px; border-radius: 10px; background: rgba(255,255,255,.05); font-size: .92rem; }
+    .claim span { overflow-wrap: anywhere; }
+    .small { font-size: .8rem; color: var(--muted); }
+    .danger { color: var(--err); }
+    #login { max-width: 420px; margin: 40px auto 0; width: 100%; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card" id="login">
+      <h2>Host admin 🪔</h2>
+      <form id="loginForm">
+        <label class="field"><span>Passphrase</span><input type="password" name="key" autocomplete="current-password" required /></label>
+        <p class="err" id="loginErr" role="alert"></p>
+        <button class="btn btn-gold btn-block" type="submit">Unlock</button>
+      </form>
+    </section>
+
+    <div id="app" class="adm" hidden>
+      <div class="top">
+        <h1 class="admin">Diwali 2026 · Host</h1>
+        <div class="acat-row">
+          <button class="btn btn-sm" id="reload" type="button">↻ Refresh</button>
+          <button class="btn btn-sm" id="expRsvp" type="button">⬇ RSVPs CSV</button>
+          <button class="btn btn-sm" id="expPot" type="button">⬇ Potluck CSV</button>
+          <a class="btn btn-sm" href="/diwali2026" target="_blank" rel="noopener">Guest page ↗</a>
+          <button class="btn btn-sm" id="logout" type="button">Lock</button>
+        </div>
+      </div>
+      <p class="err" id="err" role="alert"></p>
+
+      <section class="card">
+        <h2>Headcount</h2>
+        <div class="stats" id="stats"></div>
+      </section>
+
+      <section class="card">
+        <h2>RSVPs</h2>
+        <div class="tbl"><table>
+          <thead><tr><th>Name</th><th>Status</th><th>Adults</th><th>Kids</th><th>Dietary</th><th>Note</th><th>Updated</th><th></th></tr></thead>
+          <tbody id="rsvps"></tbody>
+        </table></div>
+      </section>
+
+      <section class="card">
+        <h2>Potluck</h2>
+        <p class="small">Spots = 0 means open-ended (anyone can add). Lowering spots moves existing dishes into the remaining spots; it won't drop anyone.</p>
+        <div id="acats" style="display:grid;gap:12px"></div>
+        <form id="addCat" class="acat" style="margin-top:12px">
+          <strong>Add a category</strong>
+          <div class="acat-row">
+            <input name="name" maxlength="30" placeholder="e.g. Drinks" required aria-label="Category name" />
+            <input name="slots" type="number" min="0" max="50" value="2" aria-label="Spots" />
+            <button class="btn btn-gold" type="submit">Add</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/diwali2026/admin/admin.js" defer></script>
+</body>
+</html>
