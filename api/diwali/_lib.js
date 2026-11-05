@@ -3,20 +3,10 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 
 export const P = 'dw26:'; // Redis key prefix
 export const K = {
-  seeded: P + 'seeded',
   rsvps: P + 'rsvps', // hash: rsvpId -> JSON
   tok: P + 'tok', // hash: tokenHash -> rsvpId
-  cats: P + 'cats', // hash: catId -> JSON {id,name,slots(0=open-ended),order,byGuest,created}
-  claims: (catId) => P + 'claims:' + catId, // hash: slotKey -> JSON {name,dish,th,ts}
+  dishes: P + 'dishes', // hash: dishId -> JSON {id,rsvpId,type,item,ts}
 };
-
-const SEED = [
-  ['curries', 'Curries', 2],
-  ['rotis', 'Rotis', 1],
-  ['sweets', 'Sweets', 3],
-  ['raita', 'Raita', 1],
-  ['others', 'Others', 0],
-];
 
 function cfg() {
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
@@ -70,17 +60,6 @@ export async function pipeline(cmds) {
 /** EVAL a Lua script. */
 export function lua(script, keys, args) {
   return redis('EVAL', script, keys.length, ...keys, ...args);
-}
-
-export async function ensureSeed() {
-  const first = await redis('SET', K.seeded, '1', 'NX');
-  if (first !== 'OK') return;
-  const now = Date.now();
-  const args = [];
-  SEED.forEach(([id, name, slots], i) => {
-    args.push(id, JSON.stringify({ id, name, slots, order: i, byGuest: false, created: now }));
-  });
-  await redis('HSET', K.cats, ...args);
 }
 
 export function hgetallToObj(arr) {
@@ -224,23 +203,16 @@ export function shortName(name) {
 
 // ---------- data loading ----------
 
-export async function loadCats() {
-  const catsRaw = hgetallToObj(await redis('HGETALL', K.cats));
-  const cats = Object.values(catsRaw).map(parse).filter(Boolean);
-  cats.sort((a, b) => a.order - b.order || a.created - b.created);
-  const claimLists = await pipeline(cats.map((c) => ['HGETALL', K.claims(c.id)]));
-  cats.forEach((c, i) => {
-    const o = hgetallToObj(claimLists[i]);
-    c.claims = Object.entries(o)
-      .map(([slot, v]) => ({ slot, ...parse(v) }))
-      .filter((x) => x.dish != null)
-      .sort((a, b) => {
-        const na = Number(a.slot), nb = Number(b.slot);
-        if (Number.isInteger(na) && Number.isInteger(nb)) return na - nb;
-        return a.ts - b.ts;
-      });
-  });
-  return cats;
+export async function loadDishes() {
+  const raw = hgetallToObj(await redis('HGETALL', K.dishes));
+  return Object.values(raw).map(parse).filter(Boolean).sort((a, b) => a.ts - b.ts);
+}
+
+/** The RSVP that owns this guest token, or null. */
+export async function rsvpForToken(token) {
+  if (!token) return null;
+  const id = await redis('HGET', K.tok, sha(token));
+  return id ? parse(await redis('HGET', K.rsvps, id)) : null;
 }
 
 export async function loadRsvps() {
@@ -248,7 +220,3 @@ export async function loadRsvps() {
   return Object.values(raw).map(parse).filter(Boolean).sort((a, b) => a.created - b.created);
 }
 
-export function catSlug(name) {
-  const base = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || 'cat';
-  return base + '-' + newId(3).toLowerCase();
-}

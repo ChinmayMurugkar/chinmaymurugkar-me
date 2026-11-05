@@ -78,7 +78,7 @@
       ['Going kids', sum('going', 'kids')],
       ['Maybe (people)', sum('maybe', 'adults') + sum('maybe', 'kids')],
       ['RSVPs going', cnt('going')], ['RSVPs maybe', cnt('maybe')], ["Can't go", cnt('no')],
-      ['Dishes signed up', data.cats.reduce((a, c) => a + c.claims.length, 0)],
+      ['Dishes', data.dishes.length],
     ];
     $('stats').replaceChildren(...stats.map(([l, v]) => h('div', { class: 'stat' }, h('b', null, v), h('span', null, l))));
 
@@ -88,37 +88,19 @@
       h('td', null, x.adults), h('td', null, x.kids),
       h('td', { class: 'note' }, x.diet || ''), h('td', { class: 'note' }, x.note || ''),
       h('td', { class: 'small' }, fmt(x.updated)),
-      h('td', null, confirmBtn('Delete', () => act({ action: 'deleteRsvp', id: x.id }, 'RSVP removed'))),
+      h('td', null, confirmBtn('Delete', () => act({ action: 'deleteRsvp', id: x.id }, 'RSVP and their dishes removed'))),
     )) : [h('tr', null, h('td', { colSpan: 8, class: 'small' }, 'No RSVPs yet.'))]));
 
-    const cats = data.cats;
-    $('acats').replaceChildren(...cats.map((c, i) => {
-      const nameIn = h('input', { name: 'name', value: c.name, maxLength: 30, 'aria-label': 'Category name' });
-      const slotsIn = h('input', { name: 'slots', type: 'number', min: 0, max: 50, value: c.slots, 'aria-label': 'Spots' });
-      const mergeSel = h('select', { 'aria-label': 'Merge into' }, h('option', { value: '' }, 'Merge into…'),
-        cats.filter((o) => o.id !== c.id).map((o) => h('option', { value: o.id }, o.name)));
-      const move = (dir) => {
-        const ids = cats.map((x) => x.id); const j = i + dir;
-        [ids[i], ids[j]] = [ids[j], ids[i]];
-        act({ action: 'reorder', ids });
-      };
-      return h('div', { class: 'acat' },
-        h('div', { class: 'acat-row' },
-          h('button', { type: 'button', class: 'btn btn-sm', disabled: i === 0, onclick: () => move(-1), 'aria-label': 'Move up' }, '↑'),
-          h('button', { type: 'button', class: 'btn btn-sm', disabled: i === cats.length - 1, onclick: () => move(1), 'aria-label': 'Move down' }, '↓'),
-          nameIn,
-          h('button', { type: 'button', class: 'btn btn-sm', onclick: () => act({ action: 'renameCategory', id: c.id, name: nameIn.value }, 'Renamed') }, 'Rename'),
-          c.byGuest ? h('span', { class: 'badge' }, 'guest-added') : null),
-        h('div', { class: 'acat-row' },
-          h('span', { class: 'small' }, `${c.claims.length} signed up · spots:`), slotsIn,
-          h('button', { type: 'button', class: 'btn btn-sm', onclick: () => act({ action: 'setSlots', id: c.id, slots: slotsIn.value }, 'Spots updated') }, 'Set spots'),
-          mergeSel,
-          h('button', { type: 'button', class: 'btn btn-sm', onclick: () => mergeSel.value ? act({ action: 'mergeCategory', from: c.id, to: mergeSel.value }, 'Merged') : toast('Pick a category to merge into') }, 'Merge'),
-          confirmBtn('Delete category', () => act({ action: 'deleteCategory', id: c.id }, 'Category deleted'))),
-        c.claims.length ? h('div', { class: 'claims' }, c.claims.map((cl) => h('div', { class: 'claim' },
-          h('span', null, h('b', null, cl.name), ': ', cl.dish, h('span', { class: 'small' }, `  · ${fmt(cl.ts)}`)),
-          confirmBtn('Free', () => act({ action: 'freeSlot', id: c.id, slot: cl.slot }, 'Spot freed'))))) : h('span', { class: 'small' }, 'No dishes yet.'));
-    }));
+    const nameOf = Object.fromEntries(r.map((x) => [x.id, x.name]));
+    const tally = {};
+    data.dishes.forEach((d) => { const k = d.type.trim().toLowerCase(); (tally[k] ||= { l: d.type.trim(), n: 0 }).n++; });
+    $('typeTally').textContent = Object.values(tally).sort((a, b) => b.n - a.n).map((t) => `${t.l} × ${t.n}`).join('  ·  ') || 'No dishes yet.';
+    $('dishes').replaceChildren(...(data.dishes.length ? data.dishes.map((d) => h('tr', null,
+      h('td', null, nameOf[d.rsvpId] || '(removed guest)'),
+      h('td', null, d.type), h('td', { class: 'note' }, d.item),
+      h('td', { class: 'small' }, fmt(d.ts)),
+      h('td', null, confirmBtn('Remove', () => act({ action: 'deleteDish', id: d.id }, 'Dish removed'))),
+    )) : [h('tr', null, h('td', { colSpan: 5, class: 'small' }, 'No dishes yet.'))]));
   }
 
   // CSV (with spreadsheet formula-injection guard)
@@ -138,17 +120,14 @@
     ['Name', 'Status', 'Adults', 'Kids', 'Dietary', 'Note', 'Created', 'Updated'],
     ...data.rsvps.map((x) => [x.name, x.status, x.adults, x.kids, x.diet, x.note, new Date(x.created).toISOString(), new Date(x.updated).toISOString()]),
   ])));
-  $('expPot').addEventListener('click', () => download('diwali2026-potluck.csv', csv([
-    ['Category', 'Spots', 'Name', 'Dish', 'Signed up'],
-    ...data.cats.flatMap((c) => c.claims.length ? c.claims.map((cl) => [c.name, c.slots || 'open', cl.name, cl.dish, new Date(cl.ts).toISOString()]) : [[c.name, c.slots || 'open', '', '', '']]),
-  ])));
+  $('expPot').addEventListener('click', () => {
+    const nameOf = Object.fromEntries(data.rsvps.map((x) => [x.id, x.name]));
+    download('diwali2026-potluck.csv', csv([['Guest', 'Type', 'Food item', 'Added'],
+      ...data.dishes.map((d) => [nameOf[d.rsvpId] || '', d.type, d.item, new Date(d.ts).toISOString()])]));
+  });
 
   $('loginForm').addEventListener('submit', (e) => {
     e.preventDefault(); key = e.currentTarget.key.value.trim(); ss.set(key); $('loginErr').textContent = ''; load();
-  });
-  $('addCat').addEventListener('submit', (e) => {
-    e.preventDefault(); const f = e.currentTarget;
-    act({ action: 'addCategory', name: f.name.value, slots: f.slots.value }, 'Category added').then(() => f.reset());
   });
   $('reload').addEventListener('click', load);
   $('logout').addEventListener('click', () => { ss.set(null); key = null; showLogin(); });

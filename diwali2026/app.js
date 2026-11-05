@@ -264,8 +264,8 @@
   });
 
   // ---------- state ----------
-  let state = { me: null, counts: null, guests: [], cats: [] };
-  let openForm = null; // { catId, slot, mode: 'claim' | 'update', dish? }
+  let state = { me: null, counts: null, guests: [] };
+  let openForm = null; // { id } while editing one of my dishes
   let rsvpEditing = false;
   const savedName = () => (state.me && state.me.name) || store.get('dw26_name') || '';
 
@@ -276,7 +276,7 @@
       renderRsvp(); renderGuests(); renderPotluck();
     } catch (e) {
       $('guestSummary').textContent = e.message;
-      if (!state.cats.length) $('cats').replaceChildren(h('p', { class: 'muted' }, e.message));
+      $('potList').replaceChildren(h('p', { class: 'muted' }, e.message));
     }
   }
 
@@ -379,150 +379,97 @@
     $('guestList').replaceChildren(...groups.filter(Boolean));
   }
 
-  // ---------- potluck ----------
-  const isOpenEnded = (c) => !c.slots;
-  const taken = (c) => c.slots ? c.claims.filter((x) => Number(x.slot) <= c.slots).length : c.claims.length;
-  const isFull = (c) => !isOpenEnded(c) && taken(c) >= c.slots;
+  // ---------- potluck (free-form: each RSVP'd guest adds type + item) ----------
+  const TYPE_COLORS = ['#f59e0b', '#ec4f8a', '#8b5cf6', '#14a394', '#3b82f6', '#ea580c'];
+  const typeColor = (t) => { let n = 0; for (const ch of t.toLowerCase()) n = (n * 31 + ch.charCodeAt(0)) >>> 0; return TYPE_COLORS[n % TYPE_COLORS.length]; };
+  const dishChip = (d) => h('span', { class: 'dish' }, h('span', { class: 'dtype', style: `--c:${typeColor(d.type)}` }, d.type), d.item);
+  const dishForm = $('dishForm');
 
   function renderPotluck() {
-    // summary chips
-    $('potSummary').replaceChildren(...state.cats.map((c) =>
-      isOpenEnded(c)
-        ? h('span', { class: 'chip' }, `${c.name} ${c.claims.length ? '· ' + c.claims.length : ''}`)
-        : h('span', { class: 'chip ' + (isFull(c) ? 'full' : 'need') }, `${c.name} ${taken(c)}/${c.slots}${isFull(c) ? ' ✓' : ''}`)));
+    const all = state.guests.flatMap((g) => g.dishes);
+    // tally by type (case-insensitive), so gaps and doubles are easy to spot
+    const tally = {};
+    for (const d of all) { const k = d.type.trim().toLowerCase(); (tally[k] ||= { label: d.type.trim(), n: 0 }).n++; }
+    const chips = Object.values(tally).sort((a, b) => b.n - a.n).map((t) => h('span', { class: 'chip', style: `--c:${typeColor(t.label)}` }, `${t.label} × ${t.n}`));
+    $('potSummary').replaceChildren(...(chips.length ? chips : [h('span', { class: 'chip' }, 'No dishes yet. Be the first!')]));
+    $('navPot').hidden = !all.length; $('navPot').textContent = all.length; $('navPot').title = all.length + ' dishes';
 
-    const openSpots = state.cats.reduce((n, c) => n + (isOpenEnded(c) ? 0 : Math.max(0, c.slots - taken(c))), 0);
-    $('navPot').hidden = !openSpots; $('navPot').textContent = openSpots; $('navPot').title = openSpots + ' open spots';
-    if (!state.cats.length) { $('cats').replaceChildren(h('p', { class: 'muted' }, 'No potluck categories yet.')); return; }
-    $('cats').replaceChildren(...state.cats.map(renderCat));
-    const f = document.querySelector('.claimform input[name=dish]');
-    if (f && document.activeElement === document.body) f.focus();
-  }
-
-  function openSpotsElsewhere(cat) {
-    return state.cats.filter((c) => c.id !== cat.id && (isOpenEnded(c) || !isFull(c)));
-  }
-
-  function renderCat(c) {
-    const rows = [];
-    if (isOpenEnded(c)) {
-      c.claims.forEach((cl) => rows.push(slotRow(c, cl)));
-      rows.push(openRow(c, 'open', c.claims.length ? '＋ Add another dish' : '＋ Add your dish'));
+    // your dishes / gate
+    const me = state.me;
+    const canAdd = me && me.status !== 'no';
+    $('myPot').hidden = !canAdd;
+    $('potGate').hidden = !!canAdd;
+    if (!canAdd) {
+      $('potGateMsg').textContent = me ? 'Your RSVP says you can’t make it, so no dish needed. If plans change, update your RSVP and add one here.' : 'RSVP first, then come back here to add what you’re bringing.';
+      $('potGateBtn').textContent = me ? 'Change my RSVP' : 'RSVP first';
     } else {
-      for (let i = 1; i <= c.slots; i++) {
-        const cl = c.claims.find((x) => x.slot === String(i));
-        rows.push(cl ? slotRow(c, cl) : openRow(c, String(i), 'Open spot · tap to claim'));
-      }
-      c.claims.filter((x) => !(Number(x.slot) >= 1 && Number(x.slot) <= c.slots)).forEach((cl) => rows.push(slotRow(c, cl)));
+      $('myDishes').replaceChildren(...(me.dishes.length ? me.dishes.map((d) => h('div', { class: 'mydish' + (openForm && openForm.id === d.id ? ' editing' : '') },
+        dishChip(d),
+        h('span', { class: 'tools' },
+          h('button', { type: 'button', class: 'btn btn-ghost', onclick: () => editDish(d) }, 'Edit'),
+          h('button', { type: 'button', class: 'btn btn-ghost', onclick: (e) => removeDish(e.currentTarget, d) }, 'Remove')))) : [h('p', { class: 'muted' }, 'Nothing added yet.')]));
+      if (!openForm) $('dishSubmit').textContent = me.dishes.length ? 'Add another dish' : 'Add my dish';
     }
-    let note = null;
-    if (isFull(c)) {
-      const others = openSpotsElsewhere(c);
-      note = h('p', { class: 'full-note' }, `✓ ${c.name} is all covered, thank you! `,
-        others.length ? ['Still open: ', ...others.slice(0, 5).flatMap((o, i) => [i ? ', ' : '', h('a', { href: '#cat-' + o.id }, o.name)])] : null);
-    }
-    const count = isOpenEnded(c) ? (c.claims.length ? `${c.claims.length} dish${c.claims.length === 1 ? '' : 'es'}` : 'any dish welcome') : `${taken(c)} of ${c.slots} claimed`;
-    return h('div', { class: 'cat', id: 'cat-' + c.id },
-      h('div', { class: 'cat-head' },
-        h('h3', null, c.name, c.byGuest ? h('span', { class: 'badge', title: 'Added by a guest' }, 'guest-added') : null),
-        h('span', { class: 'count' }, count)),
-      h('div', { class: 'slots' }, rows),
-      note);
+
+    // everyone
+    const guests = state.guests;
+    $('potList').replaceChildren(...(guests.length ? guests.map((g, i) => {
+      const extra = g.adults + g.kids - 1;
+      return h('div', { class: 'potrow' + (g.mine ? ' mine' : '') },
+        h('div', { class: 'who' },
+          h('span', { class: 'avatar', style: `background:${AV[(g.name.charCodeAt(0) + i) % AV.length]}` }, g.name[0]),
+          h('span', null, h('b', null, g.name), g.mine ? ' (you)' : '', extra > 0 ? h('span', { class: 'plus' }, ' +' + extra) : null,
+            g.status === 'maybe' ? h('span', { class: 'plus' }, ' · maybe') : null)),
+        h('div', { class: 'dishes' }, g.dishes.length ? g.dishes.map(dishChip) : h('span', { class: 'none' }, 'No dish yet')));
+    }) : [h('p', { class: 'muted' }, 'Once guests RSVP, they’ll show up here with their dishes.')]));
   }
 
-  const formFor = (c, slot) => openForm && openForm.catId === c.id && openForm.slot === slot;
-
-  function openRow(c, slot, label) {
-    if (formFor(c, slot)) return claimForm(c, slot);
-    return h('button', { type: 'button', class: 'slot open', onclick: () => { openForm = { catId: c.id, slot, mode: 'claim' }; $('potErr').textContent = ''; renderPotluck(); } }, label);
+  function editDish(d) {
+    openForm = { id: d.id };
+    dishForm.type.value = d.type; dishForm.item.value = d.item;
+    $('dishSubmit').textContent = 'Save changes'; $('dishCancel').hidden = false; $('dishErr').textContent = '';
+    renderPotluck();
+    dishForm.item.focus();
   }
-
-  function slotRow(c, cl) {
-    if (cl.mine && formFor(c, cl.slot)) return claimForm(c, cl.slot, cl);
-    const tools = cl.mine ? h('span', { class: 'tools' },
-      h('button', { type: 'button', class: 'btn btn-ghost', onclick: () => { openForm = { catId: c.id, slot: cl.slot, mode: 'update' }; renderPotluck(); } }, 'Edit'),
-      h('button', { type: 'button', class: 'btn btn-ghost', onclick: (e) => release(e.currentTarget, c, cl) }, 'Remove')) : null;
-    return h('div', { class: 'slot taken' + (cl.mine ? ' mine' : '') },
-      h('span', { class: 'who' }, h('b', null, cl.name), ': ', cl.dish, cl.mine ? ' (you)' : ''), tools);
+  function resetDishForm() {
+    openForm = null; dishForm.reset(); $('dishCancel').hidden = true; $('dishErr').textContent = '';
   }
+  $('dishCancel').addEventListener('click', () => { resetDishForm(); renderPotluck(); });
 
-  function claimForm(c, slot, existing) {
-    const errEl = h('p', { class: 'err', role: 'alert' });
-    const nameIn = h('input', { name: 'name', maxLength: 60, required: true, placeholder: 'Your name', value: savedName(), autocomplete: 'name' });
-    const dishIn = h('input', { name: 'dish', maxLength: 80, required: true, placeholder: c.name === 'Others' ? 'What are you bringing?' : `Which ${c.name.toLowerCase().replace(/s$/, '')}?`, value: existing ? existing.dish : '' });
-    const hp = h('input', { name: 'website', tabIndex: -1, autocomplete: 'off' });
-    const submit = h('button', { type: 'submit', class: 'btn btn-gold' }, existing ? 'Save' : 'Claim it');
-    const f = h('form', { class: 'claimform', novalidate: true },
-      h('label', { class: 'field' }, h('span', null, 'Your name'), nameIn),
-      h('label', { class: 'field' }, h('span', null, 'What you’re bringing'), dishIn),
-      h('label', { class: 'hp', 'aria-hidden': 'true' }, 'Website ', hp),
-      errEl,
-      h('div', { class: 'btns' },
-        h('button', { type: 'button', class: 'btn', onclick: () => { openForm = null; renderPotluck(); } }, 'Cancel'),
-        submit));
-    f.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errEl.textContent = '';
-      if (!nameIn.value.trim()) { errEl.textContent = 'Please add your name.'; nameIn.focus(); return; }
-      if (!dishIn.value.trim()) { errEl.textContent = 'Please say what you’re bringing.'; dishIn.focus(); return; }
-      submit.disabled = true;
-      try {
-        const d = await api('potluck', { action: existing ? 'update' : 'claim', catId: c.id, slot, name: nameIn.value, dish: dishIn.value, website: hp.value });
-        if (d.fake) return;
-        setToken(d.token);
-        store.set('dw26_name', nameIn.value.trim());
-        openForm = null;
-        await refresh();
-        toast(existing ? 'Dish updated ✓' : `Thank you! ${dishIn.value.trim()} is on the menu 🎉`);
-      } catch (ex) {
-        if (['TAKEN', 'FULL', 'STALE'].includes(ex.code)) {
-          openForm = null;
-          await refresh();
-          $('potErr').textContent = ex.message;
-          $('potErr').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-        } else {
-          errEl.textContent = ex.message;
-          submit.disabled = false;
-        }
-      }
-    });
-    setTimeout(() => (nameIn.value ? dishIn : nameIn).focus({ preventScroll: true }), 0);
-    return f;
-  }
+  dishForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const err = $('dishErr'); err.textContent = '';
+    if (!dishForm.type.value.trim()) { err.textContent = 'Add a type, like Curry, Sweet or Drink.'; dishForm.type.focus(); return; }
+    if (!dishForm.item.value.trim()) { err.textContent = 'Say what you’re bringing.'; dishForm.item.focus(); return; }
+    const btn = $('dishSubmit'); btn.disabled = true;
+    const editing = openForm && openForm.id;
+    try {
+      const d = await api('potluck', editing
+        ? { action: 'update', id: openForm.id, type: dishForm.type.value, item: dishForm.item.value, website: dishForm.website.value }
+        : { action: 'add', type: dishForm.type.value, item: dishForm.item.value, website: dishForm.website.value });
+      if (d.fake) return;
+      const item = dishForm.item.value.trim();
+      resetDishForm();
+      await refresh();
+      toast(editing ? 'Dish updated ✓' : `Thank you! ${item} is on the menu 🎉`);
+    } catch (ex) {
+      err.textContent = ex.message;
+      if (ex.code === 'NO_RSVP' || ex.code === 'STALE') { resetDishForm(); await refresh(); }
+    } finally { btn.disabled = false; }
+  });
 
-  async function release(btn, c, cl) {
+  async function removeDish(btn, d) {
     if (btn.dataset.armed !== '1') {
       btn.dataset.armed = '1'; btn.textContent = 'Tap to confirm';
       setTimeout(() => { if (btn.isConnected) { btn.dataset.armed = ''; btn.textContent = 'Remove'; } }, 3500);
       return;
     }
     btn.disabled = true;
-    try {
-      await api('potluck', { action: 'release', catId: c.id, slot: cl.slot });
-      toast('Removed. The spot is open again.');
-    } catch (ex) { $('potErr').textContent = ex.message; }
+    try { await api('potluck', { action: 'remove', id: d.id }); toast('Dish removed'); }
+    catch (ex) { $('potErr').textContent = ex.message; }
+    if (openForm && openForm.id === d.id) resetDishForm();
     await refresh();
   }
-
-  // new category
-  $('catForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const f = e.currentTarget, err = $('catErr'); err.textContent = '';
-    if (!f.name.value.trim()) { err.textContent = 'Please name the category.'; return; }
-    const btn = f.querySelector('button[type=submit]'); btn.disabled = true;
-    try {
-      const d = await api('potluck', { action: 'addCategory', name: f.name.value, slots: f.slots.value, website: f.website.value });
-      if (d.fake) return;
-      f.reset(); f.closest('details').open = false;
-      openForm = { catId: d.id, slot: f.slots.value === '0' ? 'open' : '1', mode: 'claim' };
-      await refresh();
-      // if the new category has numbered slots, open slot 1; open-ended uses "open"
-      const cat = state.cats.find((x) => x.id === d.id);
-      if (cat) { openForm.slot = cat.slots ? '1' : 'open'; renderPotluck(); document.getElementById('cat-' + d.id)?.scrollIntoView({ block: 'center' }); }
-      toast('Category added. Now add your dish!');
-    } catch (ex) { err.textContent = ex.message; }
-    finally { btn.disabled = false; }
-  });
 
   // keep the lists fresh (but never while someone is typing)
   setInterval(() => {

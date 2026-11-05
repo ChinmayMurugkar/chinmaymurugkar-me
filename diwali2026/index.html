@@ -95,7 +95,7 @@
 
           <div class="cta">
             <a class="btn btn-gold btn-big" href="#rsvp" id="heroRsvp">RSVP</a>
-            <a class="btn btn-big" href="#potluck">Pick a dish</a>
+            <a class="btn btn-big" href="#potluck">Add a dish</a>
           </div>
         </div>
       </div>
@@ -160,7 +160,7 @@
             </div>
           </div>
           <div class="actions">
-            <a class="btn btn-gold" href="#potluck">Pick a potluck dish →</a>
+            <a class="btn btn-gold" href="#potluck">Add your potluck dish →</a>
             <button class="btn" type="button" id="changeRsvp">Change my RSVP</button>
           </div>
         </div>
@@ -212,27 +212,43 @@
     <!-- ============ POTLUCK ============ -->
     <section class="view" id="potluck" data-view="potluck" aria-labelledby="potTitle" hidden>
       <h2 class="view-title" id="potTitle">Potluck</h2>
-      <p class="lede">Pick an open spot and tell us what you're bringing. One dish each is plenty, but you're welcome to grab another or add it under Others.</p>
-      <div id="potSummary" class="chips" aria-label="Potluck summary"></div>
-      <p class="err" id="potErr" role="alert"></p>
-      <div id="cats" class="cats"><p class="muted">Loading…</p></div>
+      <div class="card glass potnote">
+        <span class="ico i-gold" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0Z" /><path d="M8 8.5c0-1.5 1.5-1.5 1.5-3M12 8.5c0-1.5 1.5-1.5 1.5-3M16 8.5c0-1.5 1.5-1.5 1.5-3" /></svg></span>
+        <p><strong>Bring a dish that serves 5–6 people.</strong> That's plenty! Add what you're bringing below so we get a good mix of food.</p>
+      </div>
+      <div id="potSummary" class="chips" aria-label="Dishes so far, by type"></div>
 
-      <details class="newcat glass">
-        <summary>＋ Add a new category (e.g. Snacks, Drinks)</summary>
-        <form id="catForm" novalidate>
-          <label class="field"><span>Category name</span><input name="name" maxlength="30" required placeholder="Drinks" /></label>
-          <label class="field"><span>How many spots?</span>
-            <select name="slots">
-              <option value="0">Open-ended (anyone can add)</option>
-              <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-              <option value="4">4</option><option value="5">5</option>
-            </select>
-          </label>
+      <div class="card glass narrow" id="myPot">
+        <h3 class="sub">Your dishes</h3>
+        <div id="myDishes" class="mydishes"></div>
+        <form id="dishForm" class="dishform" novalidate>
+          <div class="row2">
+            <label class="field"><span>Type</span><input name="type" list="dishTypes" maxlength="30" required placeholder="e.g. Curry" autocomplete="off" /></label>
+            <label class="field"><span>Food item</span><input name="item" maxlength="80" required placeholder="e.g. Paneer butter masala" autocomplete="off" /></label>
+          </div>
           <label class="hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off" /></label>
-          <p class="err" id="catErr" role="alert"></p>
-          <button class="btn btn-gold" type="submit">Add category</button>
+          <p class="err" id="dishErr" role="alert"></p>
+          <div class="btns">
+            <button class="btn" type="button" id="dishCancel" hidden>Cancel</button>
+            <button class="btn btn-gold" type="submit" id="dishSubmit">Add my dish</button>
+          </div>
         </form>
-      </details>
+        <datalist id="dishTypes">
+          <option value="Appetizer"></option><option value="Snack"></option><option value="Curry"></option><option value="Dal"></option>
+          <option value="Rice"></option><option value="Roti / Bread"></option><option value="Salad"></option><option value="Raita"></option>
+          <option value="Sweet"></option><option value="Dessert"></option><option value="Drink"></option><option value="Other"></option>
+        </datalist>
+      </div>
+      <div class="card glass narrow" id="potGate" hidden>
+        <p id="potGateMsg"></p>
+        <a class="btn btn-gold" href="#rsvp" id="potGateBtn">RSVP first</a>
+      </div>
+
+      <div class="card glass">
+        <h3 class="sub">Who's bringing what</h3>
+        <p class="err" id="potErr" role="alert"></p>
+        <div id="potList" class="potlist"><p class="muted">Loading…</p></div>
+      </div>
     </section>
 
     <footer class="foot">Made with love by the Murugkars · <a href="https://www.chinmaymurugkar.com/">chinmaymurugkar.com</a></footer>

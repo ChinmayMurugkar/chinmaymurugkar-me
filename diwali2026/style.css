@@ -387,3 +387,32 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: rgba(23
   .happy .ch { opacity: 1; animation: none !important; }
   html { scroll-behavior: auto; }
 }
+
+/* ---------- potluck: free-form dishes ---------- */
+.potnote { display: flex; gap: 14px; align-items: center; padding: 16px 18px; }
+.potnote p { margin: 0; color: var(--ink-2); }
+.potnote strong { color: var(--ink); }
+.sub { margin: 0 0 12px; font: 600 1.2rem/1.2 "Playfair Display", Georgia, serif; }
+.chip[style] { border-color: color-mix(in srgb, var(--c) 45%, white); color: color-mix(in srgb, var(--c) 80%, black); }
+.mydishes { display: grid; gap: 8px; margin-bottom: 14px; }
+.mydishes .muted { margin: 0; }
+.mydish { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 8px 8px 12px; border-radius: 16px;
+  background: linear-gradient(140deg, #fff, #e9fbf3); border: 1px solid #9fe2c2; }
+.mydish.editing { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(236, 79, 138, .15); }
+.mydish .tools { display: flex; flex-shrink: 0; }
+.dishform .btns { display: flex; gap: 8px; }
+.dishform .btns .btn { flex: 1; }
+.dish { display: inline-flex; align-items: center; gap: 8px; min-width: 0; font-weight: 500; overflow-wrap: anywhere; }
+.dtype { flex-shrink: 0; padding: 3px 9px; border-radius: 999px; font-size: .74rem; font-weight: 700; color: #fff;
+  background: var(--c, var(--pink)); box-shadow: 0 4px 10px -5px var(--c, var(--pink)); }
+.potlist { display: grid; gap: 8px; }
+.potrow { display: grid; gap: 8px; padding: 12px 14px; border-radius: 18px; background: rgba(255,255,255,.7); border: 1px solid var(--glass-line);
+  box-shadow: 0 6px 14px -10px rgba(110, 30, 80, .45); }
+.potrow.mine { background: linear-gradient(140deg, #fff, #f3ecff); border-color: #d8c8ff; }
+.potrow .who { display: flex; align-items: center; gap: 10px; }
+.potrow .dishes { display: flex; flex-wrap: wrap; gap: 6px 14px; padding-left: 40px; }
+.potrow .none { color: var(--muted); font-size: .9rem; font-style: italic; }
+@media (min-width: 960px) {
+  .potrow { grid-template-columns: minmax(180px, 240px) 1fr; align-items: center; }
+  .potrow .dishes { padding-left: 0; }
+}
