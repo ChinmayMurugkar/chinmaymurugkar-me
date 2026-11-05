@@ -200,9 +200,10 @@ export async function rateLimit(req, bucket, limit, windowSec) {
 }
 
 export async function requireAdmin(req) {
-  const expected = process.env.DIWALI_ADMIN_KEY;
+  // Trim both sides: a stray space or newline pasted into the dashboard shouldn't lock the host out.
+  const expected = (process.env.DIWALI_ADMIN_KEY || '').trim();
   if (!expected) throw new HttpError(503, 'Admin key is not configured on the server.');
-  const given = req.headers['x-admin-key'];
+  const given = typeof req.headers['x-admin-key'] === 'string' ? req.headers['x-admin-key'].trim() : null;
   const ok =
     typeof given === 'string' &&
     timingSafeEqual(Buffer.from(sha(given), 'hex'), Buffer.from(sha(expected), 'hex'));

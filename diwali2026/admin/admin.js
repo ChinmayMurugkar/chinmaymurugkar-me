@@ -144,7 +144,7 @@
   ])));
 
   $('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault(); key = e.currentTarget.key.value; ss.set(key); $('loginErr').textContent = ''; load();
+    e.preventDefault(); key = e.currentTarget.key.value.trim(); ss.set(key); $('loginErr').textContent = ''; load();
   });
   $('addCat').addEventListener('submit', (e) => {
     e.preventDefault(); const f = e.currentTarget;
